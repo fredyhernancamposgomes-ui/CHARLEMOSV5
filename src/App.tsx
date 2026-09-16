@@ -8,6 +8,7 @@ import Chat from './components/Chat';
 import MarkdownRenderer from './components/MarkdownRenderer';
 import Breadcrumbs from './components/Breadcrumbs';
 import BottomNav from './components/BottomNav';
+import { CellDiagram, RERDiagram, RELDiagram, MitochondriaDiagram, GolgiDiagram } from './components/diagrams';
 import { getMockContent } from './data/mockData';
 import { getThemeClasses } from './hooks/useTheme';
 import { useSwipe, useDebounce, useScrollToTop, useHapticFeedback, useMediaQuery } from './hooks/useMobile';
@@ -389,6 +390,24 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
           </div>
         </motion.div>
       )}
+
+      {/* Referencia Visual - Diagrama de Célula */}
+      {!searchQuery.trim() && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ delay: 0.6 }}
+          className={`mt-8 p-6 rounded-3xl border ${theme.surface} ${theme.border}`}
+        >
+          <h3 className={`text-lg font-semibold mb-4 ${theme.text}`}>
+            🔬 Referencia Visual: Célula Eucariota
+          </h3>
+          <CellDiagram viewMode={viewMode} className="max-w-2xl mx-auto" />
+          <p className={`text-sm mt-4 text-center ${theme.textMuted}`}>
+            Diagrama simplificado de los principales organelos celulares
+          </p>
+        </motion.div>
+      )}
     </div>
   );
 }
@@ -541,6 +560,28 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
     { bg: theme.phaseMasterBg, text: theme.phaseMaster },
   ];
 
+  // Determinar qué diagrama mostrar basado en el subtema
+  const getRelevantDiagram = () => {
+    const id = subtema.id.toLowerCase();
+    const path = subtema.path.toLowerCase();
+    
+    if (id.includes('rel') || path.includes('rel')) {
+      return <RELDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    if (id.includes('rer') || path.includes('rer')) {
+      return <RERDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    if (id.includes('mitocondria') || path.includes('mitocondria')) {
+      return <MitochondriaDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    if (id.includes('golgi') || path.includes('golgi')) {
+      return <GolgiDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    return null;
+  };
+
+  const diagram = getRelevantDiagram();
+
   return (
     <div>
       {/* Header */}
@@ -554,6 +595,18 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
           <span className={`text-xs ${theme.textMuted}`}>{subtema.path}</span>
         </div>
       </motion.div>
+
+      {/* Diagrama relevante (si existe) */}
+      {diagram && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          transition={{ delay: 0.1 }}
+          className={`mb-6 p-4 rounded-3xl border ${theme.surface} ${theme.border}`}
+        >
+          {diagram}
+        </motion.div>
+      )}
 
       {/* Phase Navigation - Desktop */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`hidden sm:block mb-6 p-5 rounded-3xl border ${theme.surface} ${theme.border}`}>
