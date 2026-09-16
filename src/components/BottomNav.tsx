@@ -19,16 +19,23 @@ export default function BottomNav({ currentPhase, onPhaseChange, viewMode }: Bot
   const theme = getThemeClasses(viewMode);
   const currentIndex = PHASES.findIndex(p => p.id === currentPhase);
 
+  const phaseColors = [
+    theme.phaseDiscover,
+    theme.phaseExplore,
+    theme.phaseUnderstand,
+    theme.phaseMaster,
+  ];
+
   return (
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-      className={`fixed bottom-0 left-0 right-0 z-40 sm:hidden safe-area-bottom ${
+      className={`fixed bottom-0 left-0 right-0 z-40 sm:hidden safe-area-bottom glass ${
         viewMode === 'intuitive' 
           ? 'bg-white/95 border-t border-gray-200' 
-          : 'bg-[#1E293B]/95 border-t border-[#334155]'
-      } glass`}
+          : 'bg-[#1E293B]/95 border-t border-slate-700'
+      }`}
     >
       <div className="flex items-center justify-around px-2 py-2">
         {PHASES.map((phase, index) => {
@@ -39,40 +46,34 @@ export default function BottomNav({ currentPhase, onPhaseChange, viewMode }: Bot
             <button
               key={phase.id}
               onClick={() => onPhaseChange(phase.id)}
-              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all ${
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-2xl transition-all touchable ${
                 isActive
-                  ? theme.accentLight
+                  ? viewMode === 'intuitive' ? 'bg-gray-50' : 'bg-slate-800'
                   : 'active:scale-95'
               }`}
             >
-              {/* Emoji */}
               <motion.span
                 className="text-xl"
-                animate={{ 
-                  scale: isActive ? 1.2 : 1,
-                }}
+                animate={{ scale: isActive ? 1.2 : 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
               >
                 {phase.emoji}
               </motion.span>
               
-              {/* Label */}
-              <span className={`text-[10px] font-medium ${
-                isActive ? theme.accent : theme.textMuted
+              <span className={`text-[10px] font-semibold ${
+                isActive ? phaseColors[index] : theme.textMuted
               }`}>
                 {phase.name}
               </span>
               
-              {/* Active indicator */}
               {isActive && (
                 <motion.div
                   layoutId="bottomNavIndicator"
-                  className={`absolute -top-0.5 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full ${theme.accentBg}`}
+                  className={`absolute -top-0.5 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full ${phaseColors[index].replace('text-', 'bg-')}`}
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
               
-              {/* Visited dot */}
               {isVisited && !isActive && (
                 <div className={`absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${theme.dotVisited}`} />
               )}
@@ -81,8 +82,7 @@ export default function BottomNav({ currentPhase, onPhaseChange, viewMode }: Bot
         })}
       </div>
       
-      {/* Progress bar */}
-      <div className={`h-0.5 ${theme.progressBg}`}>
+      <div className={`h-1 ${theme.progressBg}`}>
         <motion.div
           className={`h-full ${theme.progressFill}`}
           initial={{ width: 0 }}

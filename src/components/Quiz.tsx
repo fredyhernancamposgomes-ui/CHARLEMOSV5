@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, XCircle, ArrowRight, Trophy, RotateCcw } from 'lucide-react';
 import { QuizQuestion, getQuestionsByDifficulty } from '../data/mockData';
 import { registerQuizAttempt, getSubtemaProgress } from '../services/progressService';
+import { getThemeClasses } from '../hooks/useTheme';
 
 interface QuizProps {
   subtemaId: string;
