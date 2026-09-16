@@ -8,161 +8,251 @@ interface MarkdownRendererProps {
 export default function MarkdownRenderer({ content, viewMode }: MarkdownRendererProps) {
   const isIntuitive = viewMode === 'intuitive';
   
-  const accentColor = isIntuitive ? '#10B981' : '#3B82F6';
-  const textColor = isIntuitive ? 'text-gray-700' : 'text-gray-300';
+  // Premium color palette - vibrant but soft
+  const colors = {
+    primary: isIntuitive ? '#10B981' : '#10B981',
+    secondary: isIntuitive ? '#3B82F6' : '#3B82F6',
+    warm: isIntuitive ? '#F59E0B' : '#F59E0B',
+    cool: isIntuitive ? '#8B5CF6' : '#8B5CF6',
+    
+    text: isIntuitive ? '#111827' : '#F9FAFB',
+    textSecondary: isIntuitive ? '#6B7280' : '#9CA3AF',
+    textMuted: isIntuitive ? '#9CA3AF' : '#6B7280',
+    
+    border: isIntuitive ? '#E5E7EB' : '#334155',
+    surface: isIntuitive ? '#FFFFFF' : '#1E293B',
+    bg: isIntuitive ? '#FAFBFC' : '#0F172A',
+  };
 
   return (
-    <div className={`prose prose-sm max-w-none ${textColor}`}>
+    <div className="prose prose-sm max-w-none" style={{ color: colors.text }}>
       <ReactMarkdown
         components={{
-          // Títulos
+          // H1 - Main title, prominent but elegant
           h1: ({node, ...props}) => (
             <h1 
-              className="text-2xl font-bold mb-4 mt-6 first:mt-0"
-              style={{ color: accentColor }}
+              className="text-2xl sm:text-3xl font-bold mb-4 mt-8 first:mt-0 tracking-tight"
+              style={{ 
+                color: colors.text,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2
+              }}
               {...props}
             />
           ),
+          
+          // H2 - Section headers, clear hierarchy
           h2: ({node, ...props}) => (
             <h2 
-              className="text-xl font-bold mb-3 mt-5"
-              style={{ color: accentColor }}
+              className="text-xl sm:text-2xl font-semibold mb-3 mt-7 tracking-tight"
+              style={{ 
+                color: colors.text,
+                letterSpacing: '-0.01em',
+                lineHeight: 1.3
+              }}
               {...props}
             />
           ),
+          
+          // H3 - Subsections
           h3: ({node, ...props}) => (
             <h3 
-              className="text-lg font-semibold mb-2 mt-4"
-              style={{ color: accentColor }}
+              className="text-lg sm:text-xl font-semibold mb-2 mt-6"
+              style={{ 
+                color: colors.textSecondary,
+                lineHeight: 1.4
+              }}
               {...props}
             />
           ),
+          
+          // H4 - Minor headers
           h4: ({node, ...props}) => (
             <h4 
-              className="text-base font-semibold mb-2 mt-3"
-              style={{ color: accentColor }}
+              className="text-base sm:text-lg font-semibold mb-2 mt-5"
+              style={{ 
+                color: colors.textSecondary,
+                lineHeight: 1.4
+              }}
               {...props}
             />
           ),
           
-          // Párrafos
+          // Paragraphs - Comfortable reading
           p: ({node, ...props}) => (
-            <p className="mb-3 leading-relaxed" {...props} />
+            <p 
+              className="mb-4 leading-relaxed"
+              style={{ 
+                color: colors.text,
+                lineHeight: 1.7,
+                fontSize: '0.95rem'
+              }}
+              {...props}
+            />
           ),
           
-          // Negritas
+          // Strong - Vibrant accent
           strong: ({node, ...props}) => (
             <strong 
               className="font-semibold"
-              style={{ color: accentColor }}
+              style={{ 
+                color: colors.primary,
+                fontWeight: 600
+              }}
               {...props}
             />
           ),
           
-          // Cursivas
+          // Emphasis - Subtle
           em: ({node, ...props}) => (
-            <em className="italic" {...props} />
+            <em 
+              className="italic"
+              style={{ color: colors.textSecondary }}
+              {...props}
+            />
           ),
           
-          // Listas no ordenadas
+          // Unordered lists - Clean bullets
           ul: ({node, ...props}) => (
-            <ul className="mb-3 pl-5 space-y-1" {...props} />
+            <ul 
+              className="mb-4 pl-5 space-y-2"
+              style={{ color: colors.text }}
+              {...props} 
+            />
           ),
+          
           li: ({node, ...props}) => (
-            <li className="leading-relaxed" {...props} />
+            <li 
+              className="leading-relaxed"
+              style={{ lineHeight: 1.7 }}
+              {...props} 
+            />
           ),
           
-          // Listas ordenadas
+          // Ordered lists - Clear numbers
           ol: ({node, ...props}) => (
-            <ol className="mb-3 pl-5 space-y-1 list-decimal" {...props} />
+            <ol 
+              className="mb-4 pl-5 space-y-2 list-decimal"
+              style={{ color: colors.text }}
+              {...props} 
+            />
           ),
           
-          // Código inline
+          // Inline code - Premium look
           code: ({node, inline, ...props}: any) => {
             if (inline) {
               return (
                 <code 
-                  className={`px-1.5 py-0.5 rounded text-sm font-mono ${
-                    isIntuitive ? 'bg-[#10B981]/10 text-[#10B981]' : 'bg-[#3B82F6]/10 text-[#3B82F6]'
-                  }`}
+                  className="px-1.5 py-0.5 rounded font-mono text-sm"
+                  style={{ 
+                    backgroundColor: isIntuitive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.15)',
+                    color: colors.primary,
+                    fontSize: '0.875em'
+                  }}
                   {...props}
                 />
               );
             }
             return (
               <code 
-                className={`block p-3 rounded-lg text-sm font-mono overflow-x-auto ${
-                  isIntuitive ? 'bg-gray-50 text-gray-800' : 'bg-[#0F172A] text-gray-200'
-                }`}
+                className="block p-4 rounded-lg font-mono text-sm overflow-x-auto"
+                style={{ 
+                  backgroundColor: isIntuitive ? '#F9FAFB' : '#0F172A',
+                  color: colors.text,
+                  border: `1px solid ${colors.border}`,
+                  lineHeight: 1.6
+                }}
                 {...props}
               />
             );
           },
           
-          // Bloques de código
+          // Code blocks
           pre: ({node, ...props}) => (
-            <pre className="mb-3 overflow-x-auto" {...props} />
+            <pre 
+              className="mb-4 overflow-x-auto"
+              style={{ 
+                backgroundColor: isIntuitive ? '#F9FAFB' : '#0F172A',
+                borderRadius: '0.75rem'
+              }}
+              {...props} 
+            />
           ),
           
-          // Citas/Callouts
+          // Blockquotes - Elegant callouts
           blockquote: ({node, ...props}) => (
             <blockquote 
-              className={`border-l-4 pl-4 py-2 my-4 italic ${
-                isIntuitive 
-                  ? 'border-[#10B981] bg-[#10B981]/5 text-gray-700' 
-                  : 'border-[#3B82F6] bg-[#3B82F6]/5 text-gray-300'
-              }`}
+              className="border-l-4 pl-4 py-3 my-5 rounded-r-lg"
+              style={{ 
+                borderLeftColor: colors.primary,
+                backgroundColor: isIntuitive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(16, 185, 129, 0.08)',
+                color: colors.textSecondary,
+                fontStyle: 'italic'
+              }}
               {...props}
             />
           ),
           
-          // Separadores
+          // Horizontal rules - Subtle dividers
           hr: ({node, ...props}) => (
             <hr 
-              className={`my-6 ${isIntuitive ? 'border-gray-200' : 'border-[#334155]'}`}
+              className="my-8"
+              style={{ 
+                borderColor: colors.border,
+                borderWidth: '1px 0 0 0'
+              }}
               {...props}
             />
           ),
           
-          // Enlaces
+          // Links - Vibrant but not aggressive
           a: ({node, ...props}) => (
             <a 
-              className="underline font-medium transition-colors hover:opacity-80"
-              style={{ color: accentColor }}
+              className="font-medium transition-colors hover:opacity-80"
+              style={{ 
+                color: colors.secondary,
+                textDecoration: 'underline',
+                textDecorationColor: 'rgba(59, 130, 246, 0.3)',
+                textUnderlineOffset: '2px'
+              }}
               {...props}
             />
           ),
           
-          // Tablas
+          // Tables - Premium and readable
           table: ({node, ...props}) => (
-            <div className="overflow-x-auto my-4">
+            <div className="overflow-x-auto my-6 rounded-lg" style={{ border: `1px solid ${colors.border}` }}>
               <table 
-                className={`min-w-full border-collapse ${
-                  isIntuitive ? 'border border-gray-200' : 'border border-[#334155]'
-                }`}
+                className="min-w-full border-collapse"
                 {...props}
               />
             </div>
           ),
           thead: ({node, ...props}) => (
             <thead 
-              className={isIntuitive ? 'bg-gray-50' : 'bg-[#0F172A]'}
+              style={{ 
+                backgroundColor: isIntuitive ? '#F9FAFB' : '#0F172A'
+              }}
               {...props}
             />
           ),
           th: ({node, ...props}) => (
             <th 
-              className={`px-4 py-2 text-left font-semibold border ${
-                isIntuitive ? 'border-gray-200 text-gray-900' : 'border-[#334155] text-gray-100'
-              }`}
+              className="px-4 py-3 text-left font-semibold text-sm"
+              style={{ 
+                color: colors.text,
+                borderBottom: `2px solid ${colors.border}`
+              }}
               {...props}
             />
           ),
           td: ({node, ...props}) => (
             <td 
-              className={`px-4 py-2 border ${
-                isIntuitive ? 'border-gray-200' : 'border-[#334155]'
-              }`}
+              className="px-4 py-3 text-sm"
+              style={{ 
+                color: colors.textSecondary,
+                borderBottom: `1px solid ${colors.border}`
+              }}
               {...props}
             />
           ),

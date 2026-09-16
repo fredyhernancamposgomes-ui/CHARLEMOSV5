@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { estructuraCompleta, Parte, Tema, Seccion, SubtemaMetadata, countSubtemas, getCategoryForSubtema } from './data/esqueletoCompleto';
 import type { TopicCategory, LearningPhase } from './prompts/promptEngine';
-import { BookOpen, ChevronRight, Lightbulb, Microscope, ArrowLeft, Search, GraduationCap, MessageCircle, Trophy } from 'lucide-react';
+import { ChevronRight, Lightbulb, Microscope, ArrowLeft, Search, GraduationCap, MessageCircle, Trophy } from 'lucide-react';
 import Quiz from './components/Quiz';
 import Chat from './components/Chat';
 import MarkdownRenderer from './components/MarkdownRenderer';
@@ -50,10 +50,8 @@ export default function App() {
   const theme = getThemeClasses(viewMode);
   const totalSubtemas = countSubtemas();
 
-  // Scroll to top on navigation change
   useScrollToTop(nav.view === 'subtema' ? `${nav.view}-${currentPhase}` : nav.view);
 
-  // Swipe gestures for phase navigation
   const handleSwipeLeft = () => {
     if (nav.view === 'subtema') {
       const nextIndex = PHASES.findIndex(p => p.id === currentPhase) + 1;
@@ -90,14 +88,10 @@ export default function App() {
     }
   };
 
-  // Breadcrumbs
   const getBreadcrumbs = () => {
     const items: { label: string; emoji?: string; onClick?: () => void }[] = [];
-    
     if (nav.view === 'home') return items;
-    
     items.push({ label: 'Inicio', emoji: '🏠', onClick: () => setNav({ view: 'home' }) });
-    
     if (nav.view === 'parte' || nav.view === 'tema' || nav.view === 'seccion' || nav.view === 'subtema') {
       items.push({ label: nav.parte.title, emoji: nav.parte.emoji, onClick: () => setNav({ view: 'parte', parte: nav.parte }) });
     }
@@ -110,7 +104,6 @@ export default function App() {
     if (nav.view === 'subtema') {
       items.push({ label: nav.subtema.title, emoji: nav.subtema.emoji });
     }
-    
     return items;
   };
 
@@ -132,12 +125,9 @@ export default function App() {
                 </motion.button>
               )}
               
+              {/* Logo - Premium & Minimal */}
               <div className="flex items-center gap-2.5">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  viewMode === 'intuitive' 
-                    ? 'bg-gradient-to-br from-[#10B981] to-[#059669]' 
-                    : 'bg-gradient-to-br from-[#3B82F6] to-[#2563EB]'
-                }`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center gradient-primary shadow-lg`}>
                   <span className="text-white text-xl">🧬</span>
                 </div>
                 <div>
@@ -158,16 +148,16 @@ export default function App() {
             )}
           </div>
 
-          {/* Mode Toggle */}
+          {/* Mode Toggle - Premium */}
           <div className="pb-3 sm:pb-4">
             <div className={`flex items-center gap-2 p-1.5 rounded-2xl ${
-              viewMode === 'intuitive' ? 'bg-gray-100/80' : 'bg-[#1E293B]/80'
+              viewMode === 'intuitive' ? 'bg-gray-100/80' : 'bg-slate-800/80'
             }`}>
               <button
                 onClick={() => { setViewMode('intuitive'); haptic('light'); }}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all touchable ${
                   viewMode === 'intuitive'
-                    ? 'bg-white text-[#10B981] shadow-md shadow-[#10B981]/10'
+                    ? 'bg-white text-emerald-600 shadow-md'
                     : `${theme.textMuted} hover:text-gray-700`
                 }`}
               >
@@ -178,7 +168,7 @@ export default function App() {
                 onClick={() => { setViewMode('precision'); haptic('light'); }}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all touchable ${
                   viewMode === 'precision'
-                    ? 'bg-[#0F172A] text-[#3B82F6] shadow-md shadow-[#3B82F6]/10'
+                    ? 'bg-[#0F172A] text-blue-400 shadow-md'
                     : `${theme.textMuted} hover:text-gray-700`
                 }`}
               >
@@ -192,7 +182,6 @@ export default function App() {
 
       {/* Main Content */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12 ${nav.view === 'subtema' && isMobile ? 'pb-24' : ''}`}>
-        {/* Breadcrumbs */}
         {nav.view !== 'home' && (
           <Breadcrumbs items={getBreadcrumbs()} viewMode={viewMode} />
         )}
@@ -233,7 +222,7 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      {/* Bottom Navigation (mobile only, in subtema view) */}
+      {/* Bottom Navigation */}
       {nav.view === 'subtema' && isMobile && (
         <BottomNav 
           currentPhase={currentPhase} 
@@ -266,7 +255,7 @@ export default function App() {
 }
 
 // ============================================
-// HOME VIEW
+// HOME VIEW - Premium & Balanced
 // ============================================
 function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debouncedSearch }: { 
   viewMode: ViewMode; 
@@ -296,17 +285,20 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
 
   return (
     <div>
+      {/* Hero Section */}
       <div className="mb-8 sm:mb-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <div className="flex items-center gap-3 mb-4">
-            <GraduationCap className={`w-8 h-8 sm:w-10 sm:h-10 ${theme.accent}`} />
-            <h2 className={`text-3xl sm:text-4xl font-bold ${theme.text}`}>Biología Celular</h2>
+            <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center gradient-primary shadow-lg`}>
+              <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+            </div>
+            <h2 className={`text-3xl sm:text-4xl font-bold tracking-tight ${theme.text}`}>Biología Celular</h2>
           </div>
           <p className={`text-base sm:text-lg mb-2 ${theme.textSecondary}`}>Aprende con explicaciones claras y visuales.</p>
           <p className={`text-sm ${theme.textMuted}`}>🌱 Descubrir → 🔍 Explorar → 💡 Comprender → 🧠 Dominar</p>
         </motion.div>
 
-        {/* Search */}
+        {/* Search - Premium */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="relative mt-6">
           <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${theme.textMuted}`} />
           <input
@@ -314,7 +306,7 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
             placeholder="Buscar subtemas... (ej: mitocondrias, ribosomas)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full pl-12 pr-4 py-3.5 rounded-xl border text-sm transition-all outline-none ${theme.input}`}
+            className={`w-full pl-12 pr-4 py-4 rounded-2xl border text-sm transition-all outline-none ${theme.input}`}
           />
         </motion.div>
       </div>
@@ -333,7 +325,7 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
                   onClick={() => onNavigate({ view: 'subtema', parte: result.parte, tema: result.tema, seccion: result.seccion, subtema: result.subtema })}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`text-left p-4 rounded-xl border transition-all touchable ${theme.card}`}
+                  className={`text-left p-4 rounded-2xl border transition-all touchable ${theme.card}`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{result.subtema.emoji}</span>
@@ -351,7 +343,7 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
         </motion.div>
       )}
 
-      {/* Parts Grid */}
+      {/* Parts Grid - Premium Cards */}
       {!searchQuery.trim() && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {estructuraCompleta.map((parte, index) => (
@@ -363,14 +355,14 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
               transition={{ delay: 0.3 + index * 0.1 }}
               whileHover={{ y: -4 }}
               whileTap={{ scale: 0.98 }}
-              className={`text-left p-6 sm:p-8 rounded-2xl border transition-all touchable ${theme.card}`}
+              className={`text-left p-6 sm:p-8 rounded-3xl border transition-all touchable ${theme.card}`}
             >
               <div className="text-4xl sm:text-5xl mb-4">{parte.emoji}</div>
-              <h3 className={`text-xl sm:text-2xl font-bold mb-2 ${theme.text}`}>{parte.title}</h3>
+              <h3 className={`text-xl sm:text-2xl font-bold mb-2 tracking-tight ${theme.text}`}>{parte.title}</h3>
               <p className={`text-sm mb-4 ${theme.textSecondary}`}>
                 {parte.temas.length} temas • {parte.temas.reduce((acc, t) => acc + t.secciones.reduce((a, s) => a + s.subtemas.length, 0), 0)} subtemas
               </p>
-              <div className={`flex items-center gap-1 text-sm font-medium ${theme.accent}`}>
+              <div className={`flex items-center gap-1 text-sm font-semibold ${theme.accent}`}>
                 <span>Explorar</span>
                 <ChevronRight className="w-4 h-4" />
               </div>
@@ -379,18 +371,18 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
         </div>
       )}
 
-      {/* Stats */}
+      {/* Stats - Vibrant but Balanced */}
       {!searchQuery.trim() && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className={`mt-8 p-6 rounded-2xl border ${theme.gradient}`}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className={`mt-8 p-6 rounded-3xl border ${theme.gradient}`}>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
-              { value: '4', label: 'Fases' },
-              { value: '2', label: 'Modos' },
-              { value: countSubtemas().toString(), label: 'Subtemas' },
-              { value: '6', label: 'Categorías' }
+              { value: '4', label: 'Fases', color: theme.phaseDiscover },
+              { value: '2', label: 'Modos', color: theme.secondary },
+              { value: countSubtemas().toString(), label: 'Subtemas', color: theme.accent },
+              { value: '6', label: 'Categorías', color: theme.cool }
             ].map((stat) => (
               <div key={stat.label}>
-                <p className={`text-2xl font-bold ${theme.accent}`}>{stat.value}</p>
+                <p className={`text-2xl sm:text-3xl font-bold ${stat.color}`}>{stat.value}</p>
                 <p className={`text-xs ${theme.textSecondary}`}>{stat.label}</p>
               </div>
             ))}
@@ -411,7 +403,7 @@ function ParteView({ viewMode, parte, onNavigate }: { viewMode: ViewMode; parte:
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="text-4xl sm:text-5xl mb-3">{parte.emoji}</div>
-        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 ${theme.text}`}>{parte.title}</h2>
+        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{parte.title}</h2>
         <p className={`text-base ${theme.textSecondary}`}>{parte.temas.length} temas disponibles</p>
       </motion.div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -431,7 +423,7 @@ function ParteView({ viewMode, parte, onNavigate }: { viewMode: ViewMode; parte:
             <p className={`text-xs ${theme.textSecondary}`}>
               {tema.secciones.length} secciones • {tema.secciones.reduce((acc, s) => acc + s.subtemas.length, 0)} subtemas
             </p>
-            <div className={`flex items-center gap-1 mt-3 text-sm font-medium ${theme.accent}`}>
+            <div className={`flex items-center gap-1 mt-3 text-sm font-semibold ${theme.accent}`}>
               <span>Ver temas</span>
               <ChevronRight className="w-4 h-4" />
             </div>
@@ -452,7 +444,7 @@ function TemaView({ viewMode, parte, tema, onNavigate }: { viewMode: ViewMode; p
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="text-4xl sm:text-5xl mb-3">{tema.emoji}</div>
-        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 ${theme.text}`}>{tema.title}</h2>
+        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{tema.title}</h2>
         <p className={`text-sm ${theme.textMuted}`}>{parte.title}</p>
       </motion.div>
       <div className="space-y-3">
@@ -494,7 +486,7 @@ function SeccionView({ viewMode, parte, tema, seccion, onNavigate }: { viewMode:
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="text-4xl sm:text-5xl mb-3">{seccion.emoji}</div>
-        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 ${theme.text}`}>{seccion.title}</h2>
+        <h2 className={`text-3xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{seccion.title}</h2>
         <p className={`text-sm ${theme.textMuted}`}>{parte.title} → {tema.title}</p>
       </motion.div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -507,7 +499,7 @@ function SeccionView({ viewMode, parte, tema, seccion, onNavigate }: { viewMode:
             transition={{ delay: index * 0.03 }}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
-            className={`text-left p-4 rounded-xl border transition-all touchable ${theme.card}`}
+            className={`text-left p-4 rounded-2xl border transition-all touchable ${theme.card}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
@@ -527,7 +519,7 @@ function SeccionView({ viewMode, parte, tema, seccion, onNavigate }: { viewMode:
 }
 
 // ============================================
-// SUBTEMA VIEW
+// SUBTEMA VIEW - Premium Content Display
 // ============================================
 function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQuiz, onOpenChat }: { 
   viewMode: ViewMode; 
@@ -542,39 +534,48 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
   const content = getMockContent(subtema.id, currentPhase, viewMode);
   const currentPhaseIndex = PHASES.findIndex(p => p.id === currentPhase);
 
+  const phaseColors = [
+    { bg: theme.phaseDiscoverBg, text: theme.phaseDiscover },
+    { bg: theme.phaseExploreBg, text: theme.phaseExplore },
+    { bg: theme.phaseUnderstandBg, text: theme.phaseUnderstand },
+    { bg: theme.phaseMasterBg, text: theme.phaseMaster },
+  ];
+
   return (
     <div>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
         <div className="text-5xl sm:text-6xl mb-3">{subtema.emoji}</div>
-        <h2 className={`text-2xl sm:text-4xl font-bold mb-2 ${theme.text}`}>{subtema.title}</h2>
+        <h2 className={`text-2xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{subtema.title}</h2>
         <div className="flex flex-wrap items-center gap-2 mt-3">
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${theme.accentLight} ${theme.accent} ${theme.accentBorder} border`}>
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${theme.accentLight} ${theme.accent} border ${theme.accentBorder}`}>
             {CATEGORY_LABELS[category]}
           </span>
           <span className={`text-xs ${theme.textMuted}`}>{subtema.path}</span>
         </div>
       </motion.div>
 
-      {/* Phase Navigation (Desktop) */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`hidden sm:block mb-6 p-5 rounded-2xl border ${theme.surface} ${theme.border}`}>
-        <p className={`text-xs font-medium mb-3 ${theme.textMuted}`}>PROGRESIÓN DE APRENDIZAJE</p>
+      {/* Phase Navigation - Desktop */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`hidden sm:block mb-6 p-5 rounded-3xl border ${theme.surface} ${theme.border}`}>
+        <p className={`text-xs font-semibold mb-3 uppercase tracking-wide ${theme.textMuted}`}>Progresión de Aprendizaje</p>
         <div className="flex items-center gap-2">
-          {PHASES.map((phase) => (
+          {PHASES.map((phase, idx) => (
             <button
               key={phase.id}
               onClick={() => setCurrentPhase(phase.id)}
-              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-xl transition-all touchable ${
-                currentPhase === phase.id ? theme.buttonActive : `${theme.surfaceHover} border-2 border-transparent`
+              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-2xl transition-all touchable ${
+                currentPhase === phase.id 
+                  ? `${phaseColors[idx].bg} border-2 ${phaseColors[idx].text.replace('text-', 'border-')}`
+                  : `${theme.surfaceHover} border-2 border-transparent`
               }`}
             >
               <span className="text-2xl">{phase.emoji}</span>
-              <span className={`text-sm font-semibold ${currentPhase === phase.id ? theme.accent : theme.textSecondary}`}>{phase.name}</span>
+              <span className={`text-sm font-semibold ${currentPhase === phase.id ? phaseColors[idx].text : theme.textSecondary}`}>{phase.name}</span>
               <span className={`text-xs ${theme.textMuted}`}>{phase.duration}</span>
             </button>
           ))}
         </div>
-        <div className={`mt-4 h-1.5 rounded-full ${theme.progressBg}`}>
+        <div className={`mt-4 h-2 rounded-full ${theme.progressBg}`}>
           <motion.div className={`h-full rounded-full ${theme.progressFill}`} initial={{ width: 0 }} animate={{ width: `${((currentPhaseIndex + 1) / PHASES.length) * 100}%` }} transition={{ duration: 0.3 }} />
         </div>
       </motion.div>
@@ -587,15 +588,15 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className={`rounded-2xl border overflow-hidden ${theme.surface} ${theme.border}`}
+          className={`rounded-3xl border overflow-hidden ${theme.surface} ${theme.border} shadow-sm`}
         >
-          <div className={`px-5 py-3 border-b ${theme.border} ${viewMode === 'intuitive' ? 'bg-gray-50/50' : 'bg-[#0F172A]/50'}`}>
+          <div className={`px-5 py-3 border-b ${theme.border} ${viewMode === 'intuitive' ? 'bg-gray-50/50' : 'bg-slate-800/50'}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-xl">{PHASES[currentPhaseIndex].emoji}</span>
                 <h3 className={`font-semibold ${theme.text}`}>Fase: {PHASES[currentPhaseIndex].name}</h3>
               </div>
-              <span className={`text-xs px-2 py-1 rounded ${theme.badge}`}>
+              <span className={`text-xs px-2 py-1 rounded-full font-semibold ${theme.badge}`}>
                 {viewMode === 'intuitive' ? '💡 Intuitivo' : '🔬 Precisión'}
               </span>
             </div>
@@ -606,11 +607,11 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
           </div>
 
           {/* Desktop navigation */}
-          <div className={`hidden sm:flex items-center justify-between px-5 py-4 border-t ${theme.border} ${viewMode === 'intuitive' ? 'bg-gray-50/50' : 'bg-[#0F172A]/50'}`}>
+          <div className={`hidden sm:flex items-center justify-between px-5 py-4 border-t ${theme.border} ${viewMode === 'intuitive' ? 'bg-gray-50/50' : 'bg-slate-800/50'}`}>
             <button
               onClick={() => { const i = currentPhaseIndex - 1; if (i >= 0) setCurrentPhase(PHASES[i].id); }}
               disabled={currentPhaseIndex === 0}
-              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${currentPhaseIndex === 0 ? 'opacity-30 cursor-not-allowed' : `${theme.surfaceHover} ${theme.textSecondary}`}`}
+              className={`flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${currentPhaseIndex === 0 ? 'opacity-30 cursor-not-allowed' : `${theme.surfaceHover} ${theme.textSecondary}`}`}
             >
               <ArrowLeft className="w-4 h-4" /><span>Anterior</span>
             </button>
@@ -622,7 +623,7 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
             <button
               onClick={() => { const i = currentPhaseIndex + 1; if (i < PHASES.length) setCurrentPhase(PHASES[i].id); }}
               disabled={currentPhaseIndex === PHASES.length - 1}
-              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all ${currentPhaseIndex === PHASES.length - 1 ? 'opacity-30 cursor-not-allowed' : `${theme.surfaceHover} ${theme.accent}`}`}
+              className={`flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${currentPhaseIndex === PHASES.length - 1 ? 'opacity-30 cursor-not-allowed' : `${theme.surfaceHover} ${theme.accent}`}`}
             >
               <span>Siguiente</span><ChevronRight className="w-4 h-4" />
             </button>
@@ -630,12 +631,12 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
         </motion.div>
       </AnimatePresence>
 
-      {/* Quiz & Chat buttons */}
+      {/* Quiz & Chat - Premium Cards */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button onClick={onOpenQuiz} className={`group p-5 rounded-2xl border-2 text-left transition-all touchable ${theme.card}`}>
+        <button onClick={onOpenQuiz} className={`group p-5 rounded-3xl border-2 text-left transition-all touchable ${theme.card}`}>
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme.accentLight}`}>
-              <Trophy className={`w-6 h-6 ${theme.accent}`} />
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${theme.secondaryLight}`}>
+              <Trophy className={`w-6 h-6 ${theme.secondary}`} />
             </div>
             <div>
               <h4 className={`font-bold ${theme.text}`}>Quiz</h4>
@@ -644,10 +645,10 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
           </div>
           <p className={`text-sm ${theme.textSecondary}`}>3 niveles de dificultad</p>
         </button>
-        <button onClick={onOpenChat} className={`group p-5 rounded-2xl border-2 text-left transition-all touchable ${theme.card}`}>
+        <button onClick={onOpenChat} className={`group p-5 rounded-3xl border-2 text-left transition-all touchable ${theme.card}`}>
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme.accentLight}`}>
-              <MessageCircle className={`w-6 h-6 ${theme.accent}`} />
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${theme.coolLight}`}>
+              <MessageCircle className={`w-6 h-6 ${theme.cool}`} />
             </div>
             <div>
               <h4 className={`font-bold ${theme.text}`}>Chat IA</h4>
@@ -660,18 +661,18 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
 
       {/* Related topics */}
       {subtema.temasRelacionados.length > 0 && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className={`mt-6 p-5 rounded-2xl border ${theme.surface} ${theme.border}`}>
-          <h4 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>🔗 Temas Relacionados</h4>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className={`mt-6 p-5 rounded-3xl border ${theme.surface} ${theme.border}`}>
+          <h4 className={`text-sm font-semibold mb-3 ${theme.textSecondary}`}>🔗 Temas Relacionados</h4>
           <div className="flex flex-wrap gap-2">
             {subtema.temasRelacionados.map((t, i) => (
-              <span key={i} className={`px-3 py-1.5 rounded-full text-xs ${viewMode === 'intuitive' ? 'bg-gray-100 text-gray-600' : 'bg-[#334155] text-gray-300'}`}>{t}</span>
+              <span key={i} className={`px-3 py-1.5 rounded-full text-xs font-medium ${viewMode === 'intuitive' ? 'bg-gray-100 text-gray-600' : 'bg-slate-700 text-gray-300'}`}>{t}</span>
             ))}
           </div>
         </motion.div>
       )}
 
       {/* Demo notice */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className={`mt-6 p-5 rounded-2xl border ${theme.gradient}`}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className={`mt-6 p-5 rounded-3xl border ${theme.gradient}`}>
         <h4 className={`text-sm font-semibold mb-2 ${theme.accent}`}>⚙️ Contenido Demo — v4.0</h4>
         <p className={`text-xs leading-relaxed ${theme.textSecondary}`}>
           El tema <strong>REL</strong> tiene contenido completo. Cuando se conecte la IA, se generará contenido real para los 100+ subtemas.

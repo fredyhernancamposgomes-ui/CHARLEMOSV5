@@ -20,31 +20,31 @@ interface ThemeContextType {
 }
 
 const intuitiveColors = {
-  bg: 'bg-[#FAFAFA]',
+  bg: 'bg-[#FAFBFC]',
   surface: 'bg-white',
   border: 'border-gray-200',
   text: 'text-gray-900',
   textSecondary: 'text-gray-600',
   textMuted: 'text-gray-400',
-  accent: 'text-[#10B981]',
-  accentLight: 'bg-[#10B981]/10',
-  accentBorder: 'border-[#10B981]/20',
-  hover: 'hover:bg-gray-100',
-  active: 'active:bg-gray-200',
+  accent: 'text-emerald-500',
+  accentLight: 'bg-emerald-50',
+  accentBorder: 'border-emerald-200',
+  hover: 'hover:bg-gray-50',
+  active: 'active:bg-gray-100',
 };
 
 const precisionColors = {
   bg: 'bg-[#0F172A]',
   surface: 'bg-[#1E293B]',
-  border: 'border-[#334155]',
-  text: 'text-gray-100',
+  border: 'border-slate-700',
+  text: 'text-gray-50',
   textSecondary: 'text-gray-400',
   textMuted: 'text-gray-500',
-  accent: 'text-[#3B82F6]',
-  accentLight: 'bg-[#3B82F6]/10',
-  accentBorder: 'border-[#3B82F6]/20',
-  hover: 'hover:bg-[#334155]',
-  active: 'active:bg-[#475569]',
+  accent: 'text-emerald-400',
+  accentLight: 'bg-emerald-500/10',
+  accentBorder: 'border-emerald-500/20',
+  hover: 'hover:bg-slate-800',
+  active: 'active:bg-slate-700',
 };
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
@@ -68,83 +68,115 @@ export function useTheme() {
 }
 
 // ============================================
-// UTILITY FUNCTIONS FOR STYLING
+// PREMIUM THEME CLASSES - "Duolingo meets Stripe"
 // ============================================
 
 export function getThemeClasses(mode: ViewMode) {
   const isIntuitive = mode === 'intuitive';
   
   return {
-    // Backgrounds
-    bg: isIntuitive ? 'bg-[#FAFAFA]' : 'bg-[#0F172A]',
+    // Backgrounds - Clean & Airy
+    bg: isIntuitive ? 'bg-[#FAFBFC]' : 'bg-[#0F172A]',
     surface: isIntuitive ? 'bg-white' : 'bg-[#1E293B]',
-    surfaceHover: isIntuitive ? 'hover:bg-gray-50' : 'hover:bg-[#0F172A]',
+    surfaceHover: isIntuitive ? 'hover:bg-gray-50' : 'hover:bg-slate-800',
     
-    // Borders
-    border: isIntuitive ? 'border-gray-200' : 'border-[#334155]',
-    borderHover: isIntuitive ? 'hover:border-[#10B981]' : 'hover:border-[#3B82F6]',
+    // Borders - Subtle & Premium
+    border: isIntuitive ? 'border-gray-200' : 'border-slate-700',
+    borderHover: isIntuitive ? 'hover:border-emerald-300' : 'hover:border-emerald-600',
     
-    // Text
-    text: isIntuitive ? 'text-gray-900' : 'text-gray-100',
+    // Text - Clear hierarchy
+    text: isIntuitive ? 'text-gray-900' : 'text-gray-50',
     textSecondary: isIntuitive ? 'text-gray-600' : 'text-gray-400',
     textMuted: isIntuitive ? 'text-gray-400' : 'text-gray-500',
     
-    // Accent
-    accent: isIntuitive ? 'text-[#10B981]' : 'text-[#3B82F6]',
-    accentBg: isIntuitive ? 'bg-[#10B981]' : 'bg-[#3B82F6]',
-    accentLight: isIntuitive ? 'bg-[#10B981]/10' : 'bg-[#3B82F6]/10',
-    accentBorder: isIntuitive ? 'border-[#10B981]/30' : 'border-[#3B82F6]/30',
-    accentHover: isIntuitive ? 'hover:bg-[#059669]' : 'hover:bg-[#2563EB]',
+    // Accent - Vibrant but soft
+    accent: isIntuitive ? 'text-emerald-500' : 'text-emerald-400',
+    accentBg: isIntuitive ? 'bg-emerald-500' : 'bg-emerald-500',
+    accentLight: isIntuitive ? 'bg-emerald-50' : 'bg-emerald-500/10',
+    accentBorder: isIntuitive ? 'border-emerald-200' : 'border-emerald-500/20',
+    accentHover: isIntuitive ? 'hover:bg-emerald-600' : 'hover:bg-emerald-600',
     
-    // Interactive
+    // Secondary accent
+    secondary: isIntuitive ? 'text-blue-500' : 'text-blue-400',
+    secondaryBg: isIntuitive ? 'bg-blue-500' : 'bg-blue-500',
+    secondaryLight: isIntuitive ? 'bg-blue-50' : 'bg-blue-500/10',
+    
+    // Warm accent
+    warm: isIntuitive ? 'text-amber-500' : 'text-amber-400',
+    warmLight: isIntuitive ? 'bg-amber-50' : 'bg-amber-500/10',
+    
+    // Cool accent
+    cool: isIntuitive ? 'text-violet-500' : 'text-violet-400',
+    coolLight: isIntuitive ? 'bg-violet-50' : 'bg-violet-500/10',
+    
+    // Interactive - Premium feel
     button: isIntuitive 
-      ? 'bg-white border-gray-200 hover:border-[#10B981] hover:shadow-sm' 
-      : 'bg-[#1E293B] border-[#334155] hover:border-[#3B82F6]',
+      ? 'bg-white border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all duration-300' 
+      : 'bg-[#1E293B] border-slate-700 hover:border-emerald-600 hover:shadow-lg transition-all duration-300',
     buttonActive: isIntuitive 
-      ? 'bg-[#10B981]/10 border-[#10B981]/30' 
-      : 'bg-[#3B82F6]/10 border-[#3B82F6]/30',
+      ? 'bg-emerald-50 border-emerald-200' 
+      : 'bg-emerald-500/10 border-emerald-500/20',
     
-    // Card
+    // Card - Elevated & Clean
     card: isIntuitive 
-      ? 'bg-white border-gray-200 hover:border-[#10B981] hover:shadow-sm' 
-      : 'bg-[#1E293B] border-[#334155] hover:border-[#3B82F6]',
+      ? 'bg-white border border-gray-200 hover:border-emerald-300 hover:shadow-lg transition-all duration-300' 
+      : 'bg-[#1E293B] border border-slate-700 hover:border-emerald-600 hover:shadow-xl transition-all duration-300',
     
-    // Header
+    // Header - Glass morphism
     header: isIntuitive 
-      ? 'bg-white/90 border-gray-200/50 shadow-sm' 
-      : 'bg-[#0F172A]/90 border-[#1E293B]/50 shadow-lg shadow-black/20',
+      ? 'bg-white/80 border-gray-200/50 shadow-sm backdrop-blur-xl' 
+      : 'bg-[#0F172A]/80 border-slate-700/50 shadow-lg backdrop-blur-xl',
     
     // Footer
     footer: isIntuitive 
       ? 'border-gray-200 bg-white/50' 
-      : 'border-[#1E293B] bg-[#0F172A]/50',
+      : 'border-slate-700 bg-[#0F172A]/50',
     
-    // Gradient
+    // Gradient backgrounds
     gradient: isIntuitive 
-      ? 'bg-gradient-to-br from-[#10B981]/5 to-[#10B981]/10 border-[#10B981]/20' 
-      : 'bg-gradient-to-br from-[#3B82F6]/5 to-[#3B82F6]/10 border-[#3B82F6]/20',
+      ? 'bg-gradient-to-br from-emerald-50/50 to-blue-50/50 border-emerald-200/50' 
+      : 'bg-gradient-to-br from-emerald-500/5 to-blue-500/5 border-emerald-500/10',
     
     // Badge
     badge: isIntuitive 
-      ? 'bg-[#10B981]/10 text-[#10B981]' 
-      : 'bg-[#3B82F6]/10 text-[#3B82F6]',
+      ? 'bg-emerald-50 text-emerald-600' 
+      : 'bg-emerald-500/10 text-emerald-400',
+    badgeSecondary: isIntuitive 
+      ? 'bg-blue-50 text-blue-600' 
+      : 'bg-blue-500/10 text-blue-400',
+    badgeWarm: isIntuitive 
+      ? 'bg-amber-50 text-amber-600' 
+      : 'bg-amber-500/10 text-amber-400',
+    badgeCool: isIntuitive 
+      ? 'bg-violet-50 text-violet-600' 
+      : 'bg-violet-500/10 text-violet-400',
     
     // Input
     input: isIntuitive 
-      ? 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#10B981] focus:ring-2 focus:ring-[#10B981]/20' 
-      : 'bg-[#1E293B] border-[#334155] text-gray-100 placeholder-gray-500 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20',
+      ? 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300' 
+      : 'bg-[#1E293B] border-slate-700 text-gray-50 placeholder-gray-500 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300',
     
     // Modal
     modal: isIntuitive ? 'bg-white' : 'bg-[#1E293B]',
-    modalBorder: isIntuitive ? 'border-gray-200' : 'border-[#334155]',
+    modalBorder: isIntuitive ? 'border-gray-200' : 'border-slate-700',
     
     // Progress bar
-    progressBg: isIntuitive ? 'bg-gray-100' : 'bg-[#334155]',
-    progressFill: isIntuitive ? 'bg-[#10B981]' : 'bg-[#3B82F6]',
+    progressBg: isIntuitive ? 'bg-gray-100' : 'bg-slate-700',
+    progressFill: isIntuitive ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : 'bg-gradient-to-r from-emerald-500 to-emerald-400',
     
     // Dot indicators
-    dotActive: isIntuitive ? 'bg-[#10B981]' : 'bg-[#3B82F6]',
-    dotInactive: isIntuitive ? 'bg-gray-200' : 'bg-[#334155]',
-    dotVisited: isIntuitive ? 'bg-[#10B981]/40' : 'bg-[#3B82F6]/40',
+    dotActive: isIntuitive ? 'bg-emerald-500' : 'bg-emerald-400',
+    dotInactive: isIntuitive ? 'bg-gray-200' : 'bg-slate-700',
+    dotVisited: isIntuitive ? 'bg-emerald-200' : 'bg-emerald-500/30',
+    
+    // Phase colors - Each phase has its own color
+    phaseDiscover: isIntuitive ? 'text-emerald-500' : 'text-emerald-400',
+    phaseDiscoverBg: isIntuitive ? 'bg-emerald-50' : 'bg-emerald-500/10',
+    phaseExplore: isIntuitive ? 'text-blue-500' : 'text-blue-400',
+    phaseExploreBg: isIntuitive ? 'bg-blue-50' : 'bg-blue-500/10',
+    phaseUnderstand: isIntuitive ? 'text-amber-500' : 'text-amber-400',
+    phaseUnderstandBg: isIntuitive ? 'bg-amber-50' : 'bg-amber-500/10',
+    phaseMaster: isIntuitive ? 'text-violet-500' : 'text-violet-400',
+    phaseMasterBg: isIntuitive ? 'bg-violet-50' : 'bg-violet-500/10',
   };
 }
