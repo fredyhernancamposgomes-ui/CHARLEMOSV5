@@ -8,7 +8,11 @@ import Chat from './components/Chat';
 import MarkdownRenderer from './components/MarkdownRenderer';
 import Breadcrumbs from './components/Breadcrumbs';
 import BottomNav from './components/BottomNav';
-import { CellDiagram, RERDiagram, RELDiagram, MitochondriaDiagram, GolgiDiagram } from './components/diagrams';
+import { 
+  CellDiagram, RERDiagram, RELDiagram, MitochondriaDiagram, GolgiDiagram,
+  ProkaryoteDiagram, PlantCellDiagram, NucleusDiagram, MembraneDiagram,
+  CiliaFlagellaDiagram, ChloroplastDiagram
+} from './components/diagrams';
 import { getMockContent } from './data/mockData';
 import { getThemeClasses } from './hooks/useTheme';
 import { useSwipe, useDebounce, useScrollToTop, useHapticFeedback, useMediaQuery } from './hooks/useMobile';
@@ -391,7 +395,7 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
         </motion.div>
       )}
 
-      {/* Referencia Visual - Diagrama de Célula */}
+      {/* Referencias Visuales - Galería de Diagramas */}
       {!searchQuery.trim() && (
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
@@ -399,12 +403,39 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
           transition={{ delay: 0.6 }}
           className={`mt-8 p-6 rounded-3xl border ${theme.surface} ${theme.border}`}
         >
-          <h3 className={`text-lg font-semibold mb-4 ${theme.text}`}>
-            🔬 Referencia Visual: Célula Eucariota
+          <h3 className={`text-lg font-semibold mb-6 ${theme.text}`}>
+            🔬 Referencias Visuales
           </h3>
-          <CellDiagram viewMode={viewMode} className="max-w-2xl mx-auto" />
-          <p className={`text-sm mt-4 text-center ${theme.textMuted}`}>
-            Diagrama simplificado de los principales organelos celulares
+          
+          {/* Célula Eucariota Animal */}
+          <div className="mb-8">
+            <h4 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>
+              Célula Eucariota Animal
+            </h4>
+            <CellDiagram viewMode={viewMode} className="max-w-2xl mx-auto" />
+          </div>
+          
+          {/* Grid de otros diagramas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Célula Procariota */}
+            <div>
+              <h4 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>
+                Célula Procariota
+              </h4>
+              <ProkaryoteDiagram viewMode={viewMode} className="w-full" />
+            </div>
+            
+            {/* Célula Vegetal */}
+            <div>
+              <h4 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>
+                Célula Vegetal
+              </h4>
+              <PlantCellDiagram viewMode={viewMode} className="w-full" />
+            </div>
+          </div>
+          
+          <p className={`text-sm mt-6 text-center ${theme.textMuted}`}>
+            Diagramas científicos de los principales tipos celulares y organelos
           </p>
         </motion.div>
       )}
@@ -418,6 +449,21 @@ function HomeView({ viewMode, onNavigate, searchQuery, setSearchQuery, debounced
 function ParteView({ viewMode, parte, onNavigate }: { viewMode: ViewMode; parte: Parte; onNavigate: (state: NavigationState) => void }) {
   const theme = getThemeClasses(viewMode);
   
+  // Determinar diagrama relevante para la parte
+  const getParteDiagram = () => {
+    const parteId = parte.id.toLowerCase();
+    
+    if (parteId.includes('citologia-1')) {
+      return <ProkaryoteDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    if (parteId.includes('citologia-2')) {
+      return <CellDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    return null;
+  };
+  
+  const parteDiagram = getParteDiagram();
+  
   return (
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -425,6 +471,22 @@ function ParteView({ viewMode, parte, onNavigate }: { viewMode: ViewMode; parte:
         <h2 className={`text-3xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{parte.title}</h2>
         <p className={`text-base ${theme.textSecondary}`}>{parte.temas.length} temas disponibles</p>
       </motion.div>
+      
+      {/* Diagrama de la parte si existe */}
+      {parteDiagram && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ delay: 0.1 }}
+          className={`mb-6 p-4 rounded-3xl border ${theme.surface} ${theme.border}`}
+        >
+          <h3 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>
+            Referencia Visual
+          </h3>
+          {parteDiagram}
+        </motion.div>
+      )}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {parte.temas.map((tema, index) => (
           <motion.button
@@ -459,6 +521,30 @@ function ParteView({ viewMode, parte, onNavigate }: { viewMode: ViewMode; parte:
 function TemaView({ viewMode, parte, tema, onNavigate }: { viewMode: ViewMode; parte: Parte; tema: Tema; onNavigate: (state: NavigationState) => void }) {
   const theme = getThemeClasses(viewMode);
   
+  // Determinar diagrama relevante para el tema
+  const getTemaDiagram = () => {
+    const temaId = tema.id.toLowerCase();
+    
+    if (temaId.includes('membrana')) {
+      return <MembraneDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    if (temaId.includes('nucleo')) {
+      return <NucleusDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    if (temaId.includes('amembranosos') || temaId.includes('cilios')) {
+      return <CiliaFlagellaDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    if (temaId.includes('bimembranosos')) {
+      return <ChloroplastDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    if (temaId.includes('endomembranas')) {
+      return <GolgiDiagram viewMode={viewMode} className="max-w-lg mx-auto" />;
+    }
+    return null;
+  };
+  
+  const temaDiagram = getTemaDiagram();
+  
   return (
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -466,6 +552,22 @@ function TemaView({ viewMode, parte, tema, onNavigate }: { viewMode: ViewMode; p
         <h2 className={`text-3xl sm:text-4xl font-bold mb-2 tracking-tight ${theme.text}`}>{tema.title}</h2>
         <p className={`text-sm ${theme.textMuted}`}>{parte.title}</p>
       </motion.div>
+      
+      {/* Diagrama del tema si existe */}
+      {temaDiagram && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ delay: 0.1 }}
+          className={`mb-6 p-4 rounded-3xl border ${theme.surface} ${theme.border}`}
+        >
+          <h3 className={`text-sm font-medium mb-3 ${theme.textSecondary}`}>
+            Referencia Visual
+          </h3>
+          {temaDiagram}
+        </motion.div>
+      )}
+      
       <div className="space-y-3">
         {tema.secciones.map((seccion, index) => (
           <motion.button
@@ -565,18 +667,49 @@ function SubtemaView({ viewMode, subtema, currentPhase, setCurrentPhase, onOpenQ
     const id = subtema.id.toLowerCase();
     const path = subtema.path.toLowerCase();
     
-    if (id.includes('rel') || path.includes('rel')) {
+    // Retículo Endoplasmático
+    if (id.includes('rel') || path.includes('/rel/')) {
       return <RELDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
     }
-    if (id.includes('rer') || path.includes('rer')) {
+    if (id.includes('rer') || path.includes('/rer/')) {
       return <RERDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
     }
-    if (id.includes('mitocondria') || path.includes('mitocondria')) {
+    
+    // Mitocondrias
+    if (id.includes('mitocondria') || path.includes('mitocondrias')) {
       return <MitochondriaDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
     }
+    
+    // Golgi
     if (id.includes('golgi') || path.includes('golgi')) {
       return <GolgiDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
     }
+    
+    // Núcleo
+    if (id.includes('carioteca') || id.includes('nucleo') || path.includes('nucleo/carioteca')) {
+      return <NucleusDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    
+    // Membrana
+    if (id.includes('membrana') || id.includes('mosaico') || path.includes('membrana')) {
+      return <MembraneDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    
+    // Cilios y Flagelos
+    if (id.includes('cilio') || id.includes('flagelo') || path.includes('cilios-flagelos')) {
+      return <CiliaFlagellaDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    
+    // Cloroplastos
+    if (id.includes('cloroplasto') || path.includes('cloroplastos')) {
+      return <ChloroplastDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    
+    // Célula Procariota
+    if (id.includes('procariota') || path.includes('procariota')) {
+      return <ProkaryoteDiagram viewMode={viewMode} className="max-w-md mx-auto" />;
+    }
+    
     return null;
   };
 
